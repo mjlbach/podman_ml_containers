@@ -89,9 +89,10 @@ RUN test "${CHECKOUT_TF_SRC}" -eq 1 && git clone https://github.com/tensorflow/t
 
 # Link the libcuda stub to the location where tensorflow is searching for it and reconfigure
 # dynamic linker run-time bindings
-RUN ln -s /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/stubs/libcuda.so.1 \
-    && echo "/usr/local/cuda/lib64/stubs" > /etc/ld.so.conf.d/z-cuda-stubs.conf \
-    && ldconfig
+# mjlbach - Disabling, this seems to cause issues with tf-nightly finding the cuda libraries
+# RUN ln -s /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/stubs/libcuda.so.1 \
+#     && echo "/usr/local/cuda/lib64/stubs" > /etc/ld.so.conf.d/z-cuda-stubs.conf \
+#     && ldconfig
 
 # See http://bugs.python.org/issue19846
 ENV LANG C.UTF-8
@@ -133,6 +134,7 @@ RUN apt-get update && apt-get install -y \
         lua5.2 \
         direnv \
         git-lfs \
+        less \
         fuse
 
 RUN curl -sL https://deb.nodesource.com/setup_13.x | bash - \
