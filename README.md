@@ -29,6 +29,14 @@ https://github.com/containers/libpod/issues/3155
 * A mock home directory is created in $(pwd)/.containers/$USER, so your virtual environments should remain rootless
 * Make sure your DISPLAY variable is set correctly
 * Some of the containers contain unnecessary packages related to my personal setup/preferences
-
+* /etc/group and /etc/passwd are forwarded into the container to share the local X server, which has the consequence of preventing the use of apt inside the container
+* You cannot directly use apt in the container due to forwarding /etc/group, which leads to:
+```
+dpkg: unrecoverable fatal error, aborting:
+ unknown group 'messagebus' in statoverride file
+E: Sub-process /usr/bin/dpkg returned an error code (2)
+```
+* Forwarding /etc/passwd into the container causes a harmless error message (No user _apt) in the container
+*
 
 
