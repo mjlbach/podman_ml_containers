@@ -5,17 +5,13 @@ XAUTH=/tmp/.docker.xauth
 touch $XAUTH
 xauth nlist $DISPLAY | sed -e 's/^..../ffff/' | xauth -f $XAUTH nmerge -
 
-sudo podman run -it \
+podman run -it \
 	--rm \
-        --privileged \
         --volume=$XSOCK:$XSOCK:rw \
         --volume=$XAUTH:$XAUTH:rw \
+        --security-opt=label=type:nvidia_container_t \
         --volume \
             $(pwd)/.container/$USER:/home/$USER:z \
-        --volume \
-            $HOME/Repositories:/home/$USER/Repositories:z \
-        --volume \
-            $HOME/Documents:/home/$USER/Documents:z \
         --volume \
            /usr/bin/docker:/usr/bin/docker \
         --volume \

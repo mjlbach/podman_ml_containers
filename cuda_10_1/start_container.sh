@@ -1,10 +1,10 @@
 mkdir -p .container/$USER
 
-sudo podman run \
+podman run \
        -it \
        --rm \
        -u $(id -u):$(id -g) \
-       --privileged \
+       --security-opt=label=type:nvidia_container_t \
        --workdir \
        /home/$USER \
        --env \
